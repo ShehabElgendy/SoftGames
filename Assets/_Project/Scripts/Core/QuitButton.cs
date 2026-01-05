@@ -10,25 +10,24 @@ namespace SoftGames.Core
     [RequireComponent(typeof(Button))]
     public class QuitButton : MonoBehaviour
     {
-        private Button _button;
+        private Button button;
 
         private void Awake()
         {
-            _button = GetComponent<Button>();
-            _button.onClick.AddListener(OnClick);
+            button = GetComponent<Button>();
+            button.onClick.AddListener(OnClick);
         }
 
         private void OnDestroy()
         {
-            if (_button != null)
+            if (button != null)
             {
-                _button.onClick.RemoveListener(OnClick);
+                button.onClick.RemoveListener(OnClick);
             }
         }
 
         private void OnClick()
         {
-            Debug.Log("[QuitButton] Quitting game");
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

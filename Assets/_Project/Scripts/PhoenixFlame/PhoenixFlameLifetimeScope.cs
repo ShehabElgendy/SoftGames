@@ -22,8 +22,6 @@ namespace SoftGames.PhoenixFlame
 
         protected override void Configure(IContainerBuilder builder)
         {
-            Debug.Log($"[PhoenixFlameLifetimeScope] Configure() - Parent: {Parent?.name ?? "NULL"}");
-
             if (fireController != null)
             {
                 builder.RegisterComponent(fireController).As<IFireController>();
@@ -39,11 +37,9 @@ namespace SoftGames.PhoenixFlame
                 builder.RegisterComponent(phoenixFlameManager);
             }
 
-            // Register BackButton (drag in Inspector)
             if (backButton != null)
             {
                 builder.RegisterComponent(backButton);
-                Debug.Log("[PhoenixFlameLifetimeScope] Registered BackButton");
             }
         }
     }

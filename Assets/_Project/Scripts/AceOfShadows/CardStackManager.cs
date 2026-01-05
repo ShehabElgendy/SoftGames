@@ -181,8 +181,6 @@ namespace SoftGames.AceOfShadows
         /// </summary>
         private void OnAnimationsFinished()
         {
-            Debug.Log("All animations finished!");
-
             // Publish event via EventBus
             EventBus.Publish(new AllCardsMovedEvent
             {

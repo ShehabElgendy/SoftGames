@@ -21,8 +21,6 @@ namespace SoftGames.AceOfShadows
 
         protected override void Configure(IContainerBuilder builder)
         {
-            Debug.Log($"[AceOfShadowsLifetimeScope] Configure() - Parent: {Parent?.name ?? "NULL"}");
-
             if (cardAnimator != null)
             {
                 builder.RegisterComponent(cardAnimator).As<ICardAnimator>();
@@ -33,11 +31,9 @@ namespace SoftGames.AceOfShadows
                 builder.RegisterComponent(cardStackManager);
             }
 
-            // Register BackButton (drag in Inspector)
             if (backButton != null)
             {
                 builder.RegisterComponent(backButton);
-                Debug.Log("[AceOfShadowsLifetimeScope] Registered BackButton");
             }
         }
     }

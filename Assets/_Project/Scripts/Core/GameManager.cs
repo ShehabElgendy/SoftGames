@@ -20,7 +20,7 @@ namespace SoftGames.Core
             PhoenixFlame = 3
         }
 
-        private LifetimeScope _rootScope;
+        private LifetimeScope rootScope;
 
         /// <summary>
         /// Injected by VContainer - the LifetimeScope that owns this registration.
@@ -29,8 +29,7 @@ namespace SoftGames.Core
         [Inject]
         public void Construct(LifetimeScope ownerScope)
         {
-            _rootScope = ownerScope;
-            Debug.Log($"[GameManager] Inject SUCCESS - Got LifetimeScope: {ownerScope?.name ?? "NULL"}");
+            rootScope = ownerScope;
         }
 
         private void Awake()
@@ -59,27 +58,22 @@ namespace SoftGames.Core
 
         public void LoadScene(int sceneIndex)
         {
-            Debug.Log($"[GameManager] LoadScene({sceneIndex}) - {GetSceneName(sceneIndex)}");
-
             EventBus.Publish(new SceneLoadStartedEvent
             {
                 SceneIndex = sceneIndex,
                 SceneName = GetSceneName(sceneIndex)
             });
 
-            // Enqueue parent scope so the new scene's LifetimeScope becomes a child
-            // This allows scene-specific scopes to resolve ISceneLoader from root
-            if (_rootScope != null)
+            if (rootScope != null)
             {
-                Debug.Log($"[GameManager] EnqueueParent({_rootScope.name}) - Scene LifetimeScopes will inherit from this");
-                using (LifetimeScope.EnqueueParent(_rootScope))
+                using (LifetimeScope.EnqueueParent(rootScope))
                 {
                     SceneManager.LoadScene(sceneIndex);
                 }
             }
             else
             {
-                Debug.LogError("[GameManager] Root scope is NULL! DI hierarchy broken. BackButton won't work.");
+                Debug.LogError("[GameManager] Root scope is NULL! DI hierarchy broken.");
                 SceneManager.LoadScene(sceneIndex);
             }
         }
@@ -92,9 +86,9 @@ namespace SoftGames.Core
                 SceneName = sceneName
             });
 
-            if (_rootScope != null)
+            if (rootScope != null)
             {
-                using (LifetimeScope.EnqueueParent(_rootScope))
+                using (LifetimeScope.EnqueueParent(rootScope))
                 {
                     SceneManager.LoadScene(sceneName);
                 }

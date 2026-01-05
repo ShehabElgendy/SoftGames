@@ -11,49 +11,42 @@ namespace SoftGames.Core
     [RequireComponent(typeof(Button))]
     public class BackButton : MonoBehaviour
     {
-        private ISceneLoader _sceneLoader;
-        private Button _button;
+        private ISceneLoader sceneLoader;
+        private Button button;
 
         [Inject]
         public void Construct(ISceneLoader sceneLoader)
         {
-            _sceneLoader = sceneLoader;
-            Debug.Log($"[BackButton] Inject SUCCESS - Got ISceneLoader: {sceneLoader?.GetType().Name ?? "NULL"}");
+            this.sceneLoader = sceneLoader;
         }
 
         private void Awake()
         {
-            _button = GetComponent<Button>();
-            _button.onClick.AddListener(GoBack);
-            Debug.Log("[BackButton] Auto-wired to Button.onClick");
+            button = GetComponent<Button>();
+            button.onClick.AddListener(GoBack);
         }
 
         private void Start()
         {
-            if (_sceneLoader == null)
+            if (sceneLoader == null)
             {
                 Debug.LogError("[BackButton] ISceneLoader is NULL! Register this component in scene LifetimeScope.");
-            }
-            else
-            {
-                Debug.Log("[BackButton] Ready");
             }
         }
 
         private void OnDestroy()
         {
-            if (_button != null)
+            if (button != null)
             {
-                _button.onClick.RemoveListener(GoBack);
+                button.onClick.RemoveListener(GoBack);
             }
         }
 
         public void GoBack()
         {
-            Debug.Log("[BackButton] GoBack() called");
-            if (_sceneLoader != null)
+            if (sceneLoader != null)
             {
-                _sceneLoader.LoadMainMenu();
+                sceneLoader.LoadMainMenu();
             }
             else
             {

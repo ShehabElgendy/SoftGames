@@ -17,10 +17,6 @@ namespace SoftGames.UI
 
         protected override void Configure(IContainerBuilder builder)
         {
-            Debug.Log($"[MainMenuLifetimeScope] Configure() - Parent: {Parent?.name ?? "NULL"}");
-
-            // Use RegisterBuildCallback to inject into multiple components of same type
-            // This avoids "Conflict implementation type" error
             builder.RegisterBuildCallback(resolver =>
             {
                 if (sceneButtons != null)
@@ -30,7 +26,6 @@ namespace SoftGames.UI
                         if (btn != null)
                         {
                             resolver.Inject(btn);
-                            Debug.Log($"[MainMenuLifetimeScope] Injected: {btn.gameObject.name}");
                         }
                     }
                 }

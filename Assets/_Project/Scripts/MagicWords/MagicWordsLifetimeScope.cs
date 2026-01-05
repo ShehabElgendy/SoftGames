@@ -22,8 +22,6 @@ namespace SoftGames.MagicWords
 
         protected override void Configure(IContainerBuilder builder)
         {
-            Debug.Log($"[MagicWordsLifetimeScope] Configure() - Parent: {Parent?.name ?? "NULL"}");
-
             if (apiService != null)
             {
                 builder.RegisterComponent(apiService).As<IAPIService>();
@@ -39,11 +37,9 @@ namespace SoftGames.MagicWords
                 builder.RegisterComponent(magicWordsManager);
             }
 
-            // Register BackButton (drag in Inspector)
             if (backButton != null)
             {
                 builder.RegisterComponent(backButton);
-                Debug.Log("[MagicWordsLifetimeScope] Registered BackButton");
             }
         }
     }

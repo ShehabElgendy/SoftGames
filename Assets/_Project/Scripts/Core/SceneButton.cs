@@ -14,34 +14,32 @@ namespace SoftGames.Core
     {
         [SerializeField] private GameManager.GameScene targetScene;
 
-        private ISceneLoader _sceneLoader;
-        private Button _button;
+        private ISceneLoader sceneLoader;
+        private Button button;
 
         [Inject]
         public void Construct(ISceneLoader sceneLoader)
         {
-            _sceneLoader = sceneLoader;
-            Debug.Log($"[SceneButton:{targetScene}] Inject SUCCESS");
+            this.sceneLoader = sceneLoader;
         }
 
         private void Awake()
         {
-            _button = GetComponent<Button>();
-            _button.onClick.AddListener(OnClick);
+            button = GetComponent<Button>();
+            button.onClick.AddListener(OnClick);
         }
 
         private void OnDestroy()
         {
-            if (_button != null)
+            if (button != null)
             {
-                _button.onClick.RemoveListener(OnClick);
+                button.onClick.RemoveListener(OnClick);
             }
         }
 
         private void OnClick()
         {
-            Debug.Log($"[SceneButton] Loading {targetScene}");
-            _sceneLoader?.LoadScene((int)targetScene);
+            sceneLoader?.LoadScene((int)targetScene);
         }
     }
 }
