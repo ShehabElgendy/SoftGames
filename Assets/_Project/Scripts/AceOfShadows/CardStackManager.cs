@@ -93,19 +93,30 @@ namespace SoftGames.AceOfShadows
 
         /// <summary>
         /// Main loop: move one card every interval.
+        /// Waits for animation to complete before starting next move.
         /// </summary>
         private IEnumerator MoveCardsCycle()
         {
             float interval = config != null ? config.moveInterval : 1f;
+            WaitForSeconds waitInterval = new WaitForSeconds(interval);
 
             while (sourceStack.CardCount > 0)
             {
-                yield return new WaitForSeconds(interval);
+                yield return waitInterval;
 
-                // Skip if still animating
-                if (isAnimating) continue;
+                // Wait for current animation to complete (prevents race condition)
+                while (isAnimating)
+                {
+                    yield return null;
+                }
 
                 MoveTopCard();
+            }
+
+            // Wait for final animation to complete
+            while (isAnimating)
+            {
+                yield return null;
             }
 
             // All cards moved - show completion

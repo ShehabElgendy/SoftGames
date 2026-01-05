@@ -19,11 +19,21 @@ namespace SoftGames.PhoenixFlame
 
         private Tweener currentColorTween;
 
+        // Cached to avoid GC allocation on every color change
+        private Gradient cachedGradient;
+        private GradientColorKey[] cachedColorKeys;
+        private GradientAlphaKey[] cachedAlphaKeys;
+
         private void Awake()
         {
             fireParticles = GetComponent<ParticleSystem>();
             mainModule = fireParticles.main;
             colorModule = fireParticles.colorOverLifetime;
+
+            // Pre-allocate gradient and keys
+            cachedGradient = new Gradient();
+            cachedColorKeys = new GradientColorKey[3];
+            cachedAlphaKeys = new GradientAlphaKey[3];
         }
 
         /// <summary>
@@ -68,32 +78,26 @@ namespace SoftGames.PhoenixFlame
 
         private void UpdateColorGradient(Color baseColor)
         {
-            // Create gradient from base color to darker version to black
-            Gradient gradient = new Gradient();
-
+            // Reuse cached gradient to avoid GC allocation
             Color midColor = baseColor * 0.7f;
             midColor.a = 0.8f;
 
             Color endColor = Color.black;
             endColor.a = 0f;
 
-            gradient.SetKeys(
-                new GradientColorKey[]
-                {
-                    new GradientColorKey(baseColor, 0f),
-                    new GradientColorKey(midColor, 0.5f),
-                    new GradientColorKey(endColor, 1f)
-                },
-                new GradientAlphaKey[]
-                {
-                    new GradientAlphaKey(1f, 0f),
-                    new GradientAlphaKey(0.6f, 0.5f),
-                    new GradientAlphaKey(0f, 1f)
-                }
-            );
+            // Update cached keys
+            cachedColorKeys[0] = new GradientColorKey(baseColor, 0f);
+            cachedColorKeys[1] = new GradientColorKey(midColor, 0.5f);
+            cachedColorKeys[2] = new GradientColorKey(endColor, 1f);
+
+            cachedAlphaKeys[0] = new GradientAlphaKey(1f, 0f);
+            cachedAlphaKeys[1] = new GradientAlphaKey(0.6f, 0.5f);
+            cachedAlphaKeys[2] = new GradientAlphaKey(0f, 1f);
+
+            cachedGradient.SetKeys(cachedColorKeys, cachedAlphaKeys);
 
             colorModule.enabled = true;
-            colorModule.color = gradient;
+            colorModule.color = cachedGradient;
         }
 
         private void OnDestroy()

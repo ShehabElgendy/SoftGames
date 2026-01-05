@@ -37,7 +37,8 @@ namespace SoftGames.Core
             float fps = 1f / deltaTime;
             float ms = deltaTime * 1000f;
 
-            fpsText.text = $"{fps:F0} FPS\n{ms:F1} ms";
+            // Use SetText to avoid string allocation/GC pressure
+            fpsText.SetText("{0:0} FPS\n{1:0.0} ms", fps, ms);
 
             // Color code based on performance
             if (fps >= 55f)

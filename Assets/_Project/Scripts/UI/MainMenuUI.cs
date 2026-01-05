@@ -12,25 +12,40 @@ namespace SoftGames.UI
     public class MainMenuUI : MonoBehaviour
     {
         private ISceneLoader _sceneLoader;
+        private bool _isInjected;
 
         [Inject]
         public void Construct(ISceneLoader sceneLoader)
         {
             _sceneLoader = sceneLoader;
+            _isInjected = true;
+        }
+
+        private bool ValidateInjection()
+        {
+            if (!_isInjected || _sceneLoader == null)
+            {
+                Debug.LogError("[MainMenuUI] SceneLoader not injected! Check VContainer setup.");
+                return false;
+            }
+            return true;
         }
 
         public void LoadAceOfShadows()
         {
+            if (!ValidateInjection()) return;
             _sceneLoader.LoadScene((int)GameManager.GameScene.AceOfShadows);
         }
 
         public void LoadMagicWords()
         {
+            if (!ValidateInjection()) return;
             _sceneLoader.LoadScene((int)GameManager.GameScene.MagicWords);
         }
 
         public void LoadPhoenixFlame()
         {
+            if (!ValidateInjection()) return;
             _sceneLoader.LoadScene((int)GameManager.GameScene.PhoenixFlame);
         }
 

@@ -12,15 +12,22 @@ namespace SoftGames.UI
     public class BackButton : MonoBehaviour
     {
         private ISceneLoader _sceneLoader;
+        private bool _isInjected;
 
         [Inject]
         public void Construct(ISceneLoader sceneLoader)
         {
             _sceneLoader = sceneLoader;
+            _isInjected = true;
         }
 
         public void GoBack()
         {
+            if (!_isInjected || _sceneLoader == null)
+            {
+                Debug.LogError("[BackButton] SceneLoader not injected! Check VContainer setup.");
+                return;
+            }
             _sceneLoader.LoadMainMenu();
         }
     }

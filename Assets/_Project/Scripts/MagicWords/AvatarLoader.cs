@@ -86,6 +86,17 @@ namespace SoftGames.MagicWords
                             100f
                         );
 
+                        // Destroy existing cached sprite to prevent memory leak
+                        if (spriteCache.TryGetValue(url, out Sprite existingSprite))
+                        {
+                            if (existingSprite != null)
+                            {
+                                if (existingSprite.texture != null)
+                                    Destroy(existingSprite.texture);
+                                Destroy(existingSprite);
+                            }
+                        }
+
                         // Cache the sprite
                         spriteCache[url] = sprite;
 
