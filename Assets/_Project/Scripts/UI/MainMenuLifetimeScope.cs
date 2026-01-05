@@ -12,7 +12,7 @@ namespace SoftGames.UI
     /// </summary>
     public class MainMenuLifetimeScope : LifetimeScope
     {
-        [Header("Scene Buttons (drag all SceneButton components here)")]
+        [Header("Scene Buttons")]
         [SerializeField] private SceneButton[] sceneButtons;
 
         protected override void Configure(IContainerBuilder builder)

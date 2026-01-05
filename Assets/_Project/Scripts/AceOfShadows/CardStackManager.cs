@@ -162,9 +162,6 @@ namespace SoftGames.AceOfShadows
                     ToStackId = targetStack.StackId,
                     RemainingCards = sourceStack.CardCount
                 });
-
-                // Swap stacks after each card (alternating)
-                SwapStacks();
             });
         }
 
