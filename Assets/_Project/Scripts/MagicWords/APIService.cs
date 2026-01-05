@@ -95,13 +95,27 @@ namespace SoftGames.MagicWords
             if (response.dialogue == null) return result;
 
             // Build avatar lookup by name
+            // Note: API may have multiple entries per name; take the one with a valid-looking URL
             Dictionary<string, AvatarEntry> avatarLookup = new Dictionary<string, AvatarEntry>();
             if (response.avatars != null)
             {
                 foreach (var avatar in response.avatars)
                 {
-                    if (!string.IsNullOrEmpty(avatar.name) && !avatarLookup.ContainsKey(avatar.name))
+                    if (string.IsNullOrEmpty(avatar.name)) continue;
+
+                    // Skip entries with obviously invalid URLs (like timeout endpoints)
+                    bool hasValidUrl = !string.IsNullOrEmpty(avatar.url) &&
+                                       !avatar.url.Contains("/timeout") &&
+                                       !avatar.url.Contains(":81");
+
+                    // Add if no existing entry, or if this one has a valid URL and existing doesn't
+                    if (!avatarLookup.ContainsKey(avatar.name))
                     {
+                        avatarLookup[avatar.name] = avatar;
+                    }
+                    else if (hasValidUrl)
+                    {
+                        // Replace with entry that has valid URL
                         avatarLookup[avatar.name] = avatar;
                     }
                 }
