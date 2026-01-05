@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using VContainer;
+using VContainer.Unity;
 
 namespace SoftGames.Core
 {
     /// <summary>
     /// Global game manager. Handles scene transitions and persistent state.
     /// Uses EventBus for decoupled scene change notifications.
-    /// Registered via VContainer - no singleton pattern.
+    /// Uses VContainer's EnqueueParent for proper DI across scenes.
     /// </summary>
     public class GameManager : MonoBehaviour, ISceneLoader
     {
@@ -18,9 +20,21 @@ namespace SoftGames.Core
             PhoenixFlame = 3
         }
 
+        private LifetimeScope _rootScope;
+
+        /// <summary>
+        /// Injected by VContainer - the LifetimeScope that owns this registration.
+        /// Used for EnqueueParent when loading scenes.
+        /// </summary>
+        [Inject]
+        public void Construct(LifetimeScope ownerScope)
+        {
+            _rootScope = ownerScope;
+            Debug.Log($"[GameManager] Inject SUCCESS - Got LifetimeScope: {ownerScope?.name ?? "NULL"}");
+        }
+
         private void Awake()
         {
-            DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -45,12 +59,29 @@ namespace SoftGames.Core
 
         public void LoadScene(int sceneIndex)
         {
+            Debug.Log($"[GameManager] LoadScene({sceneIndex}) - {GetSceneName(sceneIndex)}");
+
             EventBus.Publish(new SceneLoadStartedEvent
             {
                 SceneIndex = sceneIndex,
                 SceneName = GetSceneName(sceneIndex)
             });
-            SceneManager.LoadScene(sceneIndex);
+
+            // Enqueue parent scope so the new scene's LifetimeScope becomes a child
+            // This allows scene-specific scopes to resolve ISceneLoader from root
+            if (_rootScope != null)
+            {
+                Debug.Log($"[GameManager] EnqueueParent({_rootScope.name}) - Scene LifetimeScopes will inherit from this");
+                using (LifetimeScope.EnqueueParent(_rootScope))
+                {
+                    SceneManager.LoadScene(sceneIndex);
+                }
+            }
+            else
+            {
+                Debug.LogError("[GameManager] Root scope is NULL! DI hierarchy broken. BackButton won't work.");
+                SceneManager.LoadScene(sceneIndex);
+            }
         }
 
         public void LoadScene(string sceneName)
@@ -60,7 +91,18 @@ namespace SoftGames.Core
                 SceneIndex = -1,
                 SceneName = sceneName
             });
-            SceneManager.LoadScene(sceneName);
+
+            if (_rootScope != null)
+            {
+                using (LifetimeScope.EnqueueParent(_rootScope))
+                {
+                    SceneManager.LoadScene(sceneName);
+                }
+            }
+            else
+            {
+                SceneManager.LoadScene(sceneName);
+            }
         }
 
         public void LoadMainMenu()
