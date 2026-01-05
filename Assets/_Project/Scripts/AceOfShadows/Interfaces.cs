@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using DG.Tweening;
 
 namespace SoftGames.AceOfShadows
 {
@@ -16,6 +17,18 @@ namespace SoftGames.AceOfShadows
             Action onComplete = null);
 
         void Configure(float duration, float arcHeight);
+        void Configure(float duration, Ease easeType, float arcHeight);
+    }
+
+    /// <summary>
+    /// Interface for individual card.
+    /// Allows mocking in tests.
+    /// </summary>
+    public interface ICard
+    {
+        void SetStackPosition(Vector2 position);
+        void SetSortingOrder(int order);
+        void SetAnimating(bool animating);
     }
 
     /// <summary>

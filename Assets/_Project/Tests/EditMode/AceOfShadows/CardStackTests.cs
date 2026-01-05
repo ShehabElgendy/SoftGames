@@ -5,118 +5,134 @@ using UnityEngine;
 namespace SoftGames.Tests.EditMode.AceOfShadows
 {
     /// <summary>
-    /// Unit tests for CardStack logic.
+    /// Mock card for testing - no Unity dependencies.
+    /// </summary>
+    public class MockCard : ICard
+    {
+        public Vector2 LastPosition { get; private set; }
+        public int LastSortingOrder { get; private set; }
+        public bool IsAnimating { get; private set; }
+
+        public void SetStackPosition(Vector2 position) => LastPosition = position;
+        public void SetSortingOrder(int order) => LastSortingOrder = order;
+        public void SetAnimating(bool animating) => IsAnimating = animating;
+    }
+
+    /// <summary>
+    /// Unit tests for CardStackModel (pure logic).
+    /// No Unity MonoBehaviour dependencies.
     /// </summary>
     [TestFixture]
-    public class CardStackTests
+    public class CardStackModelTests
     {
-        private GameObject _stackObject;
-        private CardStack _cardStack;
-        private Transform _container;
+        private CardStackModel<MockCard> model;
 
         [SetUp]
         public void SetUp()
         {
-            _stackObject = new GameObject("TestStack");
-            _cardStack = _stackObject.AddComponent<CardStack>();
-
-            var containerObj = new GameObject("Container");
-            containerObj.transform.SetParent(_stackObject.transform);
-            _container = containerObj.transform;
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Object.DestroyImmediate(_stackObject);
+            model = new CardStackModel<MockCard>();
         }
 
         [Test]
-        public void CardCount_Initially_ReturnsZero()
+        public void CountInitiallyReturnsZero()
         {
-            Assert.AreEqual(0, _cardStack.CardCount);
+            Assert.AreEqual(0, model.Count);
         }
 
         [Test]
-        public void AddCard_IncreasesCount()
+        public void AddWithNullDoesNotIncreaseCount()
         {
-            // Arrange
-            var cardObj = new GameObject("Card");
-            var card = cardObj.AddComponent<CardController>();
-
-            // Act
-            _cardStack.AddCard(card);
-
-            // Assert
-            Assert.AreEqual(1, _cardStack.CardCount);
-
-            // Cleanup
-            Object.DestroyImmediate(cardObj);
+            model.Add(null);
+            Assert.AreEqual(0, model.Count);
         }
 
         [Test]
-        public void RemoveTopCard_DecreasesCount()
+        public void AddWithValidCardIncreasesCount()
         {
-            // Arrange
-            var cardObj = new GameObject("Card");
-            var card = cardObj.AddComponent<CardController>();
-            _cardStack.AddCard(card);
-
-            // Act
-            var removed = _cardStack.RemoveTopCard();
-
-            // Assert
-            Assert.AreEqual(0, _cardStack.CardCount);
-            Assert.AreEqual(card, removed);
-
-            // Cleanup
-            Object.DestroyImmediate(cardObj);
+            model.Add(new MockCard());
+            Assert.AreEqual(1, model.Count);
         }
 
         [Test]
-        public void RemoveTopCard_WhenEmpty_ReturnsNull()
+        public void AddMultipleCardsIncreasesCountCorrectly()
         {
-            // Act
-            var result = _cardStack.RemoveTopCard();
+            model.Add(new MockCard());
+            model.Add(new MockCard());
+            model.Add(new MockCard());
+            Assert.AreEqual(3, model.Count);
+        }
 
-            // Assert
+        [Test]
+        public void RemoveTopWhenEmptyReturnsNull()
+        {
+            var result = model.RemoveTop();
             Assert.IsNull(result);
         }
 
         [Test]
-        public void ClearCards_RemovesAll()
+        public void RemoveTopReturnsLastAddedCard()
         {
-            // Arrange
-            for (int i = 0; i < 5; i++)
-            {
-                var cardObj = new GameObject($"Card{i}");
-                var card = cardObj.AddComponent<CardController>();
-                _cardStack.AddCard(card);
-            }
+            var card1 = new MockCard();
+            var card2 = new MockCard();
+            model.Add(card1);
+            model.Add(card2);
 
-            // Act
-            _cardStack.ClearCards();
+            var result = model.RemoveTop();
 
-            // Assert
-            Assert.AreEqual(0, _cardStack.CardCount);
+            Assert.AreEqual(card2, result);
         }
 
         [Test]
-        public void GetNextSortingOrder_ReturnsExpectedValue()
+        public void RemoveTopDecreasesCount()
         {
-            // Arrange - add 5 cards
-            for (int i = 0; i < 5; i++)
-            {
-                var cardObj = new GameObject($"Card{i}");
-                var card = cardObj.AddComponent<CardController>();
-                _cardStack.AddCard(card);
-            }
+            model.Add(new MockCard());
+            model.Add(new MockCard());
+            model.RemoveTop();
 
-            // Act
-            int nextOrder = _cardStack.GetNextSortingOrder();
+            Assert.AreEqual(1, model.Count);
+        }
 
-            // Assert - should be count (5)
-            Assert.AreEqual(5, nextOrder);
+        [Test]
+        public void PeekWhenEmptyReturnsNull()
+        {
+            var result = model.Peek();
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void PeekReturnsTopCardWithoutRemoving()
+        {
+            var card = new MockCard();
+            model.Add(card);
+
+            var result = model.Peek();
+
+            Assert.AreEqual(card, result);
+            Assert.AreEqual(1, model.Count);
+        }
+
+        [Test]
+        public void ClearRemovesAllCards()
+        {
+            model.Add(new MockCard());
+            model.Add(new MockCard());
+            model.Add(new MockCard());
+
+            model.Clear();
+
+            Assert.AreEqual(0, model.Count);
+        }
+
+        [Test]
+        public void GetNextSortingOrderReturnsCount()
+        {
+            Assert.AreEqual(0, model.GetNextSortingOrder());
+
+            model.Add(new MockCard());
+            Assert.AreEqual(1, model.GetNextSortingOrder());
+
+            model.Add(new MockCard());
+            Assert.AreEqual(2, model.GetNextSortingOrder());
         }
     }
 }

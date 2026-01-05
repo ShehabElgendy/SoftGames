@@ -4,18 +4,19 @@ using TMPro;
 namespace SoftGames.PhoenixFlame
 {
     /// <summary>
-    /// Controls color cycling via Animator Controller.
-    /// Orange -> Green -> Blue -> Orange (loop)
+    /// MonoBehaviour wrapper for color cycling.
+    /// Handles Unity-specific concerns (Animator, UI).
+    /// Delegates logic to ColorCycleModel.
     /// </summary>
     public class ColorTransitionController : MonoBehaviour
     {
-        private const string NEXT_COLOR_TRIGGER = "NextColor";
-        private static readonly string[] COLOR_NAMES = { "Orange", "Green", "Blue" };
+        private const string NextColorTrigger = "NextColor";
 
         [Header("References")]
         [SerializeField] private Animator fireAnimator;
         [SerializeField] private TextMeshProUGUI colorIndicatorText;
-        private int currentColorIndex = 0;
+
+        private readonly ColorCycleModel model = new();
 
         private void Start()
         {
@@ -27,11 +28,11 @@ namespace SoftGames.PhoenixFlame
         /// </summary>
         public void CycleColor()
         {
-            currentColorIndex = (currentColorIndex + 1) % 3;
+            model.CycleNext();
 
             if (fireAnimator != null)
             {
-                fireAnimator.SetTrigger(NEXT_COLOR_TRIGGER);
+                fireAnimator.SetTrigger(NextColorTrigger);
             }
 
             UpdateIndicator();
@@ -41,7 +42,7 @@ namespace SoftGames.PhoenixFlame
         {
             if (colorIndicatorText != null)
             {
-                colorIndicatorText.text = $"Current: {COLOR_NAMES[currentColorIndex]}";
+                colorIndicatorText.text = $"Current: {model.CurrentColorName}";
             }
         }
     }

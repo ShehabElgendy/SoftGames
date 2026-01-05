@@ -5,10 +5,11 @@ namespace SoftGames.AceOfShadows
 {
     /// <summary>
     /// Individual card behavior and visual management.
+    /// Implements ICard for testability.
     /// </summary>
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(Image))]
-    public class CardController : MonoBehaviour
+    public class CardController : MonoBehaviour, ICard
     {
         [Header("Visual")]
         [SerializeField] private Sprite cardFrontSprite;

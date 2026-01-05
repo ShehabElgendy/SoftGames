@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using SoftGames.Core;
 
 namespace SoftGames.AceOfShadows
 {
     /// <summary>
-    /// Manages a single card stack with counter display.
-    /// Implements ICardStack for testability.
+    /// MonoBehaviour wrapper for card stack.
+    /// Handles Unity-specific concerns (positioning, UI).
+    /// Delegates logic to CardStackModel.
     /// </summary>
     public class CardStack : MonoBehaviour, ICardStack
     {
@@ -19,9 +18,9 @@ namespace SoftGames.AceOfShadows
         [SerializeField] private Vector2 cardOffset = new Vector2(0.5f, -1f);
         [SerializeField] private int stackId = 0;
 
-        private List<CardController> cards = new List<CardController>();
+        private readonly CardStackModel<CardController> model = new();
 
-        public int CardCount => cards.Count;
+        public int CardCount => model.Count;
         public Transform CardContainer => cardContainer != null ? cardContainer : transform;
         public int StackId => stackId;
 
@@ -30,18 +29,13 @@ namespace SoftGames.AceOfShadows
         /// </summary>
         public void AddCard(CardController card)
         {
-            cards.Add(card);
+            int index = model.Count;
+            model.Add(card);
+
+            // Unity-specific: positioning and sorting
             card.transform.SetParent(CardContainer, true);
-
-            // Position card with stack offset
-            int index = cards.Count - 1;
-            Vector2 localPos = new Vector2(
-                index * cardOffset.x,
-                index * cardOffset.y
-            );
+            Vector2 localPos = new Vector2(index * cardOffset.x, index * cardOffset.y);
             card.SetStackPosition(localPos);
-
-            // Ensure proper sorting
             card.SetSortingOrder(index);
 
             UpdateCounter();
@@ -52,13 +46,9 @@ namespace SoftGames.AceOfShadows
         /// </summary>
         public CardController RemoveTopCard()
         {
-            if (cards.Count == 0) return null;
-
-            CardController topCard = cards[cards.Count - 1];
-            cards.RemoveAt(cards.Count - 1);
-
+            var card = model.RemoveTop();
             UpdateCounter();
-            return topCard;
+            return card;
         }
 
         /// <summary>
@@ -66,12 +56,11 @@ namespace SoftGames.AceOfShadows
         /// </summary>
         public Vector3 GetNextCardWorldPosition()
         {
-            int nextIndex = cards.Count;
+            int nextIndex = model.Count;
             Vector2 localOffset = new Vector2(
                 nextIndex * cardOffset.x,
                 nextIndex * cardOffset.y
             );
-
             return CardContainer.TransformPoint(localOffset);
         }
 
@@ -80,14 +69,14 @@ namespace SoftGames.AceOfShadows
         /// </summary>
         public int GetNextSortingOrder()
         {
-            return cards.Count;
+            return model.GetNextSortingOrder();
         }
 
         private void UpdateCounter()
         {
             if (counterText != null)
             {
-                counterText.text = cards.Count.ToString();
+                counterText.text = model.Count.ToString();
             }
         }
 
@@ -104,7 +93,7 @@ namespace SoftGames.AceOfShadows
         /// </summary>
         public void ClearCards()
         {
-            cards.Clear();
+            model.Clear();
             UpdateCounter();
         }
     }
