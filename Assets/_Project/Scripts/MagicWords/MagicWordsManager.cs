@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using SoftGames.Core;
@@ -93,6 +94,13 @@ namespace SoftGames.MagicWords
                 if (data == null) continue;
 
                 GameObject box = CreateDialogueBox(data);
+
+                // Force layout rebuild so VerticalLayoutGroup positions the box correctly
+                LayoutRebuilder.ForceRebuildLayoutImmediate(dialogueContainer as RectTransform);
+
+                // Wait one frame for layout to settle before animating
+                yield return null;
+
                 AnimateDialogueEntry(box);
 
                 // Publish event for each dialogue displayed
@@ -138,13 +146,12 @@ namespace SoftGames.MagicWords
             canvasGroup.alpha = 0f;
             canvasGroup.DOFade(1f, 0.3f);
 
-            // Slide in animation
+            // Scale animation instead of position (avoids conflict with VerticalLayoutGroup)
             RectTransform rect = box.GetComponent<RectTransform>();
             if (rect != null)
             {
-                Vector2 originalPos = rect.anchoredPosition;
-                rect.anchoredPosition = new Vector2(originalPos.x, originalPos.y - 50f);
-                rect.DOAnchorPosY(originalPos.y, 0.3f).SetEase(Ease.OutQuad);
+                rect.localScale = new Vector3(0.8f, 0.8f, 1f);
+                rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
             }
         }
 
@@ -154,6 +161,8 @@ namespace SoftGames.MagicWords
             {
                 foreach (Transform child in dialogueContainer)
                 {
+                    // Kill any running tweens on the child before destroying
+                    DOTween.Kill(child);
                     Destroy(child.gameObject);
                 }
             }
