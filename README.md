@@ -2,7 +2,7 @@
 
 Three interactive demos built with **Unity 6** demonstrating game development skills.
 
-> **[Play Live Demo](https://your-link-here.com)** *(Coming Soon)*
+> **[Play Live Demo](https://shehabelgendy.itch.io/softgames)**
 
 ---
 
