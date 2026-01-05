@@ -148,10 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d4f3209a9d0c2f4299bbeb077659623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireController: {fileID: 2038985855}
   colorController: {fileID: 1319247944}
   colorButton: {fileID: 1329935294}
-  colorData: {fileID: 0}
 --- !u!4 &49554503
 Transform:
   m_ObjectHideFlags: 0
@@ -683,9 +681,6 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  fireController: {fileID: 2038985855}
-  colorController: {fileID: 1319247944}
-  phoenixFlameManager: {fileID: 49554502}
   backButton: {fileID: 1161806556}
 --- !u!4 &825400930
 Transform:
@@ -977,6 +972,7 @@ GameObject:
   - component: {fileID: 1218528415}
   - component: {fileID: 1218528419}
   - component: {fileID: 1218528418}
+  - component: {fileID: 1218528420}
   m_Layer: 0
   m_Name: PhoenixFlameCanvas
   m_TagString: Untagged
@@ -1055,6 +1051,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1218528420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218528414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1319247943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,11 +1097,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b668f0c6001704b82e54fd1ff15a16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireController: {fileID: 2038985855}
-  fireAnimator: {fileID: 0}
+  fireAnimator: {fileID: 2038985859}
   colorIndicatorText: {fileID: 595712281}
-  colorData: {fileID: 11400000, guid: 016dca29d9e48164ab6f6f87b28fc22e, type: 2}
-  colorTriggerName: NextColor
 --- !u!4 &1319247945
 Transform:
   m_ObjectHideFlags: 0
@@ -1641,6 +1651,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcc5119d1572714895f98bcaf76fdf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireParticles: {fileID: 0}
+  cachedGradient:
+    key0:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    key1:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    key2:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key3:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key4:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key5:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key6:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    key7:
+      r: 0
+      g: 0
+      b: 0
+      a: 0
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!199 &2038985856
 ParticleSystemRenderer:
   serializedVersion: 6

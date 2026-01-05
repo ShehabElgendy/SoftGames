@@ -9,12 +9,8 @@ namespace SoftGames.PhoenixFlame
     public class PhoenixFlameManager : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private FireController fireController;
         [SerializeField] private ColorTransitionController colorController;
         [SerializeField] private Button colorButton;
-
-        [Header("Optional")]
-        [SerializeField] private FireColorData colorData;
 
         private void Start()
         {
@@ -23,12 +19,6 @@ namespace SoftGames.PhoenixFlame
             {
                 colorButton.onClick.AddListener(OnColorButtonClicked);
             }
-
-            // Initialize fire with default color if we have direct access
-            if (fireController != null && colorData != null)
-            {
-                fireController.SetFireColor(colorData.orangeColor);
-            }
         }
 
         private void OnColorButtonClicked()
@@ -36,17 +26,6 @@ namespace SoftGames.PhoenixFlame
             if (colorController != null)
             {
                 colorController.CycleColor();
-            }
-        }
-
-        /// <summary>
-        /// Reset to initial state.
-        /// </summary>
-        public void Reset()
-        {
-            if (colorController != null)
-            {
-                colorController.SetColorImmediate(0);
             }
         }
 
