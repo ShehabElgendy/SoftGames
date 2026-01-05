@@ -36,6 +36,12 @@ namespace SoftGames.AceOfShadows
             {
                 gameObject.AddComponent<GraphicRaycaster>();
             }
+
+            // Set initial sprite (show BACK of card - will flip to front during animation)
+            if (cardImage != null && cardBackSprite != null)
+            {
+                cardImage.sprite = cardBackSprite;
+            }
         }
 
         /// <summary>

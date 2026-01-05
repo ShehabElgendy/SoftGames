@@ -38,7 +38,7 @@ namespace SoftGames.AceOfShadows
     {
         int CardCount { get; }
         Transform CardContainer { get; }
-        void AddCard(CardController card);
+        void AddCard(CardController card, bool positionCard = true);
         CardController RemoveTopCard();
         Vector3 GetNextCardWorldPosition();
         int GetNextSortingOrder();

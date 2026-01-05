@@ -27,17 +27,36 @@ namespace SoftGames.AceOfShadows
         /// <summary>
         /// Add a card to this stack.
         /// </summary>
-        public void AddCard(CardController card)
+        /// <param name="card">The card to add</param>
+        /// <param name="positionCard">If true, position the card. If false, card was animated and is already at correct position</param>
+        public void AddCard(CardController card, bool positionCard = true)
         {
             int index = model.Count;
             model.Add(card);
 
-            // Unity-specific: positioning and sorting
-            card.transform.SetParent(CardContainer, true);
-            Vector2 localPos = new Vector2(index * cardOffset.x, index * cardOffset.y);
-            card.SetStackPosition(localPos);
-            card.SetSortingOrder(index);
+            if (positionCard)
+            {
+                // Initial setup: reparent and position locally
+                card.transform.SetParent(CardContainer, false);
+                Vector2 localPos = new Vector2(index * cardOffset.x, index * cardOffset.y);
+                card.SetStackPosition(localPos);
+            }
+            else
+            {
+                // Card was animated to correct position - just reparent while keeping world position
+                RectTransform rect = card.RectTransform;
+                Vector3 worldPos = rect.position;
+                Vector3 scale = rect.localScale;
 
+                rect.SetParent(CardContainer, true);
+
+                // Ensure position and scale are preserved after reparenting
+                rect.position = worldPos;
+                rect.localScale = scale;
+            }
+
+            // Use base sorting order of 100 to ensure cards render above background
+            card.SetSortingOrder(100 + index);
             UpdateCounter();
         }
 
@@ -69,7 +88,8 @@ namespace SoftGames.AceOfShadows
         /// </summary>
         public int GetNextSortingOrder()
         {
-            return model.GetNextSortingOrder();
+            // Base sorting order of 100 to render above background
+            return 100 + model.GetNextSortingOrder();
         }
 
         private void UpdateCounter()

@@ -150,7 +150,8 @@ namespace SoftGames.AceOfShadows
             cardAnimator.AnimateCardToPosition(card, targetWorldPos, targetOrder, () =>
             {
                 // Add to target stack after animation
-                targetStack.AddCard(card);
+                // Pass false since animation already positioned the card
+                targetStack.AddCard(card, positionCard: false);
 
                 isAnimating = false;
                 totalCardsMoved++;
@@ -163,14 +164,6 @@ namespace SoftGames.AceOfShadows
                     RemainingCards = sourceStack.CardCount
                 });
             });
-        }
-
-        /// <summary>
-        /// Swap source and target stacks.
-        /// </summary>
-        private void SwapStacks()
-        {
-            (sourceStack, targetStack) = (targetStack, sourceStack);
         }
 
         /// <summary>
