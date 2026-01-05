@@ -4,45 +4,42 @@ using TMPro;
 namespace SoftGames.PhoenixFlame
 {
     /// <summary>
-    /// MonoBehaviour wrapper for color cycling.
-    /// Handles Unity-specific concerns (Animator, UI).
-    /// Delegates logic to ColorCycleModel.
+    /// Controls fire color transitions via Animator Controller.
+    /// Assign the fire Animator (on ParticleSystem) in Inspector.
     /// </summary>
     public class ColorTransitionController : MonoBehaviour
     {
-        private const string NextColorTrigger = "NextColor";
+        private const string NEXT_COLOR_TRIGGER = "NextColor";
+        private static readonly string[] COLOR_NAMES = { "Orange", "Green", "Blue" };
 
         [Header("References")]
         [SerializeField] private Animator fireAnimator;
         [SerializeField] private TextMeshProUGUI colorIndicatorText;
 
-        private readonly ColorCycleModel model = new();
+        private int currentColorIndex = 0;
 
         private void Start()
         {
-            UpdateIndicator();
+            UpdateIndicatorText();
         }
 
         /// <summary>
-        /// Cycle to next color. Called by UI button.
+        /// Triggers next color transition. Called by PhoenixFlameManager.
         /// </summary>
         public void CycleColor()
         {
-            model.CycleNext();
+            if (fireAnimator == null) return;
 
-            if (fireAnimator != null)
-            {
-                fireAnimator.SetTrigger(NextColorTrigger);
-            }
-
-            UpdateIndicator();
+            currentColorIndex = (currentColorIndex + 1) % COLOR_NAMES.Length;
+            fireAnimator.SetTrigger(NEXT_COLOR_TRIGGER);
+            UpdateIndicatorText();
         }
 
-        private void UpdateIndicator()
+        private void UpdateIndicatorText()
         {
             if (colorIndicatorText != null)
             {
-                colorIndicatorText.text = $"Current: {model.CurrentColorName}";
+                colorIndicatorText.text = $"Current: {COLOR_NAMES[currentColorIndex]}";
             }
         }
     }

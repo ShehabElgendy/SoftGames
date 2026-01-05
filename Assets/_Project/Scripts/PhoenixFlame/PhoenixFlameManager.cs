@@ -14,7 +14,6 @@ namespace SoftGames.PhoenixFlame
 
         private void Start()
         {
-            // Wire up button
             if (colorButton != null)
             {
                 colorButton.onClick.AddListener(OnColorButtonClicked);
