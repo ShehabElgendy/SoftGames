@@ -681,7 +681,6 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  backButton: {fileID: 1957354417}
 --- !u!4 &825400930
 Transform:
   m_ObjectHideFlags: 0
@@ -1040,7 +1039,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1957354419}
+  m_TargetGraphic: {fileID: 1329935295}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -1293,33 +1292,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7f1452acac5d3e47ad91fe918ddca22, type: 3}
---- !u!114 &1957354417 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4468517290334068680, guid: f7f1452acac5d3e47ad91fe918ddca22, type: 3}
-  m_PrefabInstance: {fileID: 1957354416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cf58249a1aae71448aa815148a3aa9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1957354418 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2252623810949381755, guid: f7f1452acac5d3e47ad91fe918ddca22, type: 3}
   m_PrefabInstance: {fileID: 1957354416}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1957354419 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3061592608719343571, guid: f7f1452acac5d3e47ad91fe918ddca22, type: 3}
-  m_PrefabInstance: {fileID: 1957354416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2038985854
 GameObject:
   m_ObjectHideFlags: 0
