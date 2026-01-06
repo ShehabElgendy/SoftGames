@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using SoftGames.Core;
 
 namespace SoftGames.PhoenixFlame
 {
@@ -33,6 +34,12 @@ namespace SoftGames.PhoenixFlame
             currentColorIndex = (currentColorIndex + 1) % COLOR_NAMES.Length;
             fireAnimator.SetTrigger(NEXT_COLOR_TRIGGER);
             UpdateIndicatorText();
+
+            EventBus.Publish(new FireColorChangedEvent
+            {
+                ColorName = COLOR_NAMES[currentColorIndex],
+                ColorIndex = currentColorIndex
+            });
         }
 
         private void UpdateIndicatorText()

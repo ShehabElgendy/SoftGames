@@ -5,29 +5,36 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using SoftGames.Core;
+using VContainer;
 
 namespace SoftGames.MagicWords
 {
     /// <summary>
     /// Main orchestrator for Magic Words.
     /// Coordinates API calls, loading states, and dialogue display.
-    /// Uses EventBus for decoupled communication.
     /// </summary>
     public class MagicWordsManager : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private APIService apiService;
-        [SerializeField] private AvatarLoader avatarLoader;
+        [Header("UI References")]
         [SerializeField] private Transform dialogueContainer;
         [SerializeField] private GameObject dialogueBoxPrefab;
-
-        [Header("UI States")]
         [SerializeField] private GameObject loadingPanel;
         [SerializeField] private GameObject errorPanel;
         [SerializeField] private TextMeshProUGUI errorText;
 
         [Header("Animation")]
         [SerializeField] private float dialogueSpawnDelay = 0.2f;
+
+        // Injected dependencies
+        private IAPIService apiService;
+        private IAvatarLoader avatarLoader;
+
+        [Inject]
+        public void Construct(IAPIService apiService, IAvatarLoader avatarLoader)
+        {
+            this.apiService = apiService;
+            this.avatarLoader = avatarLoader;
+        }
 
         private void OnEnable()
         {
@@ -45,6 +52,8 @@ namespace SoftGames.MagicWords
                 apiService.OnDataLoaded -= HandleDataLoaded;
                 apiService.OnError -= HandleError;
             }
+            StopAllCoroutines();
+            ClearDialogue();
         }
 
         private void Start()

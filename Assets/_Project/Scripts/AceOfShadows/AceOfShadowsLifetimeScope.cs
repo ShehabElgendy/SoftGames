@@ -7,7 +7,7 @@ namespace SoftGames.AceOfShadows
 {
     /// <summary>
     /// Lifetime scope for Ace of Shadows scene.
-    /// Parent is RootLifetimeScope (via EnqueueParent in GameManager).
+    /// Registers services and uses RegisterComponentInHierarchy for UI.
     /// </summary>
     [DefaultExecutionOrder(-500)]
     public class AceOfShadowsLifetimeScope : LifetimeScope
@@ -16,25 +16,13 @@ namespace SoftGames.AceOfShadows
         [SerializeField] private CardStackManager cardStackManager;
         [SerializeField] private CardAnimator cardAnimator;
 
-        [Header("UI")]
-        [SerializeField] private BackButton backButton;
-
         protected override void Configure(IContainerBuilder builder)
         {
-            if (cardAnimator != null)
-            {
-                builder.RegisterComponent(cardAnimator).As<ICardAnimator>();
-            }
+            builder.RegisterComponent(cardAnimator).As<ICardAnimator>();
+            builder.RegisterComponent(cardStackManager);
 
-            if (cardStackManager != null)
-            {
-                builder.RegisterComponent(cardStackManager);
-            }
-
-            if (backButton != null)
-            {
-                builder.RegisterComponent(backButton);
-            }
+            // Auto-find and inject BackButton in scene hierarchy
+            builder.RegisterComponentInHierarchy<BackButton>();
         }
     }
 }

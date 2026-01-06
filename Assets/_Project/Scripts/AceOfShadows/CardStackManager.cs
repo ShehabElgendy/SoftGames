@@ -3,34 +3,40 @@ using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
 using SoftGames.Core;
+using VContainer;
 
 namespace SoftGames.AceOfShadows
 {
     /// <summary>
     /// Main orchestrator for Ace of Shadows.
     /// Creates cards, manages stacks, coordinates animations.
-    /// Uses EventBus for decoupled communication.
     /// </summary>
     public class CardStackManager : MonoBehaviour
     {
-        [Header("References")]
+        [Header("Scene References")]
         [SerializeField] private CardStack leftStack;
         [SerializeField] private CardStack rightStack;
         [SerializeField] private GameObject cardPrefab;
-        [SerializeField] private AceOfShadowsConfig config;
-        [SerializeField] private CardAnimator cardAnimator;
-
-        [Header("Completion")]
         [SerializeField] private GameObject completionPanel;
+        [SerializeField] private AceOfShadowsConfig config;
 
         [Header("Events (Optional - also uses EventBus)")]
         public UnityEvent OnAllAnimationsComplete;
+
+        // Injected dependencies
+        private ICardAnimator cardAnimator;
 
         private CardStack sourceStack;
         private CardStack targetStack;
         private bool isAnimating = false;
         private Coroutine moveCoroutine;
         private int totalCardsMoved = 0;
+
+        [Inject]
+        public void Construct(ICardAnimator cardAnimator)
+        {
+            this.cardAnimator = cardAnimator;
+        }
 
         private void Start()
         {
@@ -50,12 +56,6 @@ namespace SoftGames.AceOfShadows
 
             // Clear any existing cards
             ClearAllCards();
-
-            // Configure animator
-            if (cardAnimator != null && config != null)
-            {
-                cardAnimator.Configure(config.moveDuration, config.moveEaseType, config.moveArcHeight);
-            }
 
             // Configure stack offsets
             if (config != null)

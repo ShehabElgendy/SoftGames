@@ -8,7 +8,7 @@ namespace SoftGames.AceOfShadows
     /// Handles Unity-specific concerns (positioning, UI).
     /// Delegates logic to CardStackModel.
     /// </summary>
-    public class CardStack : MonoBehaviour, ICardStack
+    public class CardStack : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private Transform cardContainer;

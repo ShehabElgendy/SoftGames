@@ -7,40 +7,27 @@ namespace SoftGames.MagicWords
 {
     /// <summary>
     /// Lifetime scope for Magic Words scene.
-    /// Parent is RootLifetimeScope (via EnqueueParent in GameManager).
+    /// Registers services and uses RegisterComponentInHierarchy for UI.
     /// </summary>
     [DefaultExecutionOrder(-500)]
     public class MagicWordsLifetimeScope : LifetimeScope
     {
-        [Header("Scene Components")]
+        [Header("Services")]
         [SerializeField] private APIService apiService;
         [SerializeField] private AvatarLoader avatarLoader;
-        [SerializeField] private MagicWordsManager magicWordsManager;
 
-        [Header("UI")]
-        [SerializeField] private BackButton backButton;
+        [Header("Scene Components")]
+        [SerializeField] private MagicWordsManager magicWordsManager;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            if (apiService != null)
-            {
-                builder.RegisterComponent(apiService).As<IAPIService>();
-            }
+            // Register services as interfaces
+            builder.RegisterComponent(apiService).As<IAPIService>();
+            builder.RegisterComponent(avatarLoader).As<IAvatarLoader>();
+            builder.RegisterComponent(magicWordsManager);
 
-            if (avatarLoader != null)
-            {
-                builder.RegisterComponent(avatarLoader).As<IAvatarLoader>();
-            }
-
-            if (magicWordsManager != null)
-            {
-                builder.RegisterComponent(magicWordsManager);
-            }
-
-            if (backButton != null)
-            {
-                builder.RegisterComponent(backButton);
-            }
+            // Auto-find and inject BackButton in scene hierarchy
+            builder.RegisterComponentInHierarchy<BackButton>();
         }
     }
 }

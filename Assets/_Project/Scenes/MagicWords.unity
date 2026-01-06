@@ -998,11 +998,11 @@ RectTransform:
   - {fileID: 1776801181}
   m_Father: {fileID: 1957837542}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -86, y: 0}
+  m_SizeDelta: {x: 950, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1569078225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1183,8 +1183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33da85088877fdb43908502fb7804943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiService: {fileID: 395796722}
-  avatarLoader: {fileID: 2074305546}
   dialogueContainer: {fileID: 1764839145}
   dialogueBoxPrefab: {fileID: 6885611733875036875, guid: 202d437a53b67b746a8396075343977d, type: 3}
   loadingPanel: {fileID: 1569078223}
@@ -1640,11 +1638,11 @@ RectTransform:
   - {fileID: 330497167}
   m_Father: {fileID: 1957837542}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -86, y: 0}
   m_SizeDelta: {x: 950, y: 1080}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &2059679616
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 using SoftGames.Core;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -7,17 +6,14 @@ namespace SoftGames.PhoenixFlame
 {
     /// <summary>
     /// Lifetime scope for Phoenix Flame scene.
+    /// Uses RegisterComponentInHierarchy for UI.
     /// </summary>
     public class PhoenixFlameLifetimeScope : LifetimeScope
     {
-        [SerializeField] private BackButton backButton;
-
         protected override void Configure(IContainerBuilder builder)
         {
-            if (backButton != null)
-            {
-                builder.RegisterComponent(backButton);
-            }
+            // Auto-find and inject BackButton in scene hierarchy
+            builder.RegisterComponentInHierarchy<BackButton>();
         }
     }
 }

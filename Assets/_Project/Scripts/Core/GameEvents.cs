@@ -40,6 +40,16 @@ namespace SoftGames.Core
     }
 
     // ============================================
+    // PHOENIX FLAME EVENTS
+    // ============================================
+
+    public struct FireColorChangedEvent : IEvent
+    {
+        public string ColorName;
+        public int ColorIndex;
+    }
+
+    // ============================================
     // MAGIC WORDS EVENTS
     // ============================================
 

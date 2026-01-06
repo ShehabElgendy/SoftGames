@@ -7,8 +7,7 @@ namespace SoftGames.UI
 {
     /// <summary>
     /// Lifetime scope for MainMenu scene.
-    /// Drag SceneButtons into array in Inspector.
-    /// Uses RegisterBuildCallback to inject into multiple components without registration conflicts.
+    /// Uses RegisterBuildCallback to inject into multiple SceneButtons.
     /// </summary>
     public class MainMenuLifetimeScope : LifetimeScope
     {
@@ -17,17 +16,12 @@ namespace SoftGames.UI
 
         protected override void Configure(IContainerBuilder builder)
         {
+            // Multiple buttons need RegisterBuildCallback pattern
             builder.RegisterBuildCallback(resolver =>
             {
-                if (sceneButtons != null)
+                foreach (var btn in sceneButtons)
                 {
-                    foreach (var btn in sceneButtons)
-                    {
-                        if (btn != null)
-                        {
-                            resolver.Inject(btn);
-                        }
-                    }
+                    if (btn != null) resolver.Inject(btn);
                 }
             });
         }

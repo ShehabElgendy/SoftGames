@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using DG.Tweening;
-using SoftGames.Core;
 
 namespace SoftGames.AceOfShadows
 {
@@ -74,25 +73,6 @@ namespace SoftGames.AceOfShadows
                 card.SetAnimating(false);
                 onComplete?.Invoke();
             });
-        }
-
-        /// <summary>
-        /// Configure animation settings.
-        /// </summary>
-        public void Configure(float duration, float arc)
-        {
-            moveDuration = duration;
-            arcHeight = arc;
-        }
-
-        /// <summary>
-        /// Configure with ease type.
-        /// </summary>
-        public void Configure(float duration, Ease ease, float arc)
-        {
-            moveDuration = duration;
-            easeType = ease;
-            arcHeight = arc;
         }
     }
 }

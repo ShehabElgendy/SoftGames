@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace SoftGames.MagicWords
@@ -23,14 +22,5 @@ namespace SoftGames.MagicWords
     {
         void LoadAvatar(string url, Image targetImage, Action onComplete = null);
         void ClearCache();
-    }
-
-    /// <summary>
-    /// Interface for dialogue rendering.
-    /// </summary>
-    public interface IDialogueRenderer
-    {
-        GameObject CreateDialogueBox(ProcessedDialogue data);
-        void ClearDialogue();
     }
 }

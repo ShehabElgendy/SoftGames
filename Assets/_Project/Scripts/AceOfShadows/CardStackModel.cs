@@ -5,7 +5,6 @@ namespace SoftGames.AceOfShadows
     /// <summary>
     /// Pure C# class for card stack logic.
     /// No Unity dependencies - fully testable in EditMode.
-    /// Uses ICard interface for testability.
     /// </summary>
     public class CardStackModel<T> where T : class, ICard
     {
