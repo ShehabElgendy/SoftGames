@@ -29,17 +29,17 @@ namespace SoftGames.Core
             button.onClick.AddListener(OnClick);
         }
 
+        private void OnClick()
+        {
+            sceneLoader?.LoadScene((int)targetScene);
+        }
+        
         private void OnDestroy()
         {
             if (button != null)
             {
                 button.onClick.RemoveListener(OnClick);
             }
-        }
-
-        private void OnClick()
-        {
-            sceneLoader?.LoadScene((int)targetScene);
         }
     }
 }
